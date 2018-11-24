@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col-md-6">
+    <form #currentForm="ngForm" (ngSubmit)="save(currentForm.value)">
+      <div>
+        <mat-form-field>
+          <input matInput ngModel name="title" placeholder="Title" 
+          [formControl]="titleFormControl" 
+          [errorStateMatcher]="matcher">
+          <mat-error *ngIf="titleFormControl.hasError('required')">Title is <strong>required</strong></mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <input matInput ngModel name="price"  placeholder="Price" type="number"
+          [formControl]="priceFormControl" 
+          [errorStateMatcher]="matcher">
+          <span matPrefix>$&nbsp;</span>
+          <mat-error *ngIf="priceFormControl.hasError('required')">Price is <strong>required</strong></mat-error>
+          <mat-error *ngIf="priceFormControl.hasError('min')">Price should be higher than 0</mat-error>
+        </mat-form-field>
+      </div>
+    
+      <div>
+        <mat-form-field>
+          <mat-select ngModel name="category" placeholder="Category"
+          [formControl]="categoryFormControl" 
+          [errorStateMatcher]="matcher">
+            <mat-option [value]=""></mat-option>
+            <mat-option *ngFor="let c of categories$ | async" [value]="c.key">
+              {{c.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="categoryFormControl.hasError('required')">Category is <strong>required</strong></mat-error>
+        </mat-form-field>
+      </div>
+    
+      <div>
+        <mat-form-field>
+          <input matInput ngModel name="imageUrl" placeholder="Image Url" url
+          [formControl]="imageUrlFormControl" 
+          [errorStateMatcher]="matcher">
+          <mat-error *ngIf="imageUrlFormControl.hasError('required')">Url is <strong>required</strong></mat-error>
+          <mat-error *ngIf="imageUrlFormControl.hasError('url')">Please enter valid url</mat-error>
+        </mat-form-field>
+      </div>
+    
+      <button mat-raised-button color="primary">Save</button>
+    </form>
+  </div>
+  <div class="col-md-6">
+    <mat-card style="max-width: 400px">
+      <mat-card-header>
+        <mat-card-title>{{ titleFormControl.value }}</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image [src]="imageUrlFormControl.value">
+      <mat-card-content> {{ priceFormControl.value | currency:'USD':true }} </mat-card-content>
+      <!-- <mat-card-actions>
+        <button mat-button>LIKE</button>
+        <button mat-button>SHARE</button>
+      </mat-card-actions> -->
+    </mat-card>
+  </div>
+</div>
